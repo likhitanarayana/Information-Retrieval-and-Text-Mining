@@ -53,8 +53,7 @@ def tf_idf(root, output_file):
             tf = tf.drop(f, 1)
             #print("tf")
             #print(tf)
-            if counter >= 3:
-                break
+
 
 
     cols = list(tf)
