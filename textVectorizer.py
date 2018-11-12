@@ -51,29 +51,40 @@ def tf_idf(root, output_file):
                     tf[f][len(tf)-1] = 1
             tf[f+'_tf'] = tf[f]*1.0 / len(f_words)
             tf = tf.drop(f, 1)
-            print("tf")
-            print(tf)
-            if counter >= 2:
+            #print("tf")
+            #print(tf)
+            if counter >= 3:
                 break
 
 
-    tf['idf'] = np.log(len(files)*1.0/tf.eq(0).sum(axis=1))
-    for file in files:
-        file_str = file+'_tf'
-        new_file_col = file+'_tf-idf'
-        df_col = tf[[file_str]]
-        print("df col = ")
-        print(df_col)
-        print("tf.idf ")
-        print(tf[['idf']])
-        print("mult")
-        print(tf[[file_str]]*tf.idf)
-        print("idf type = {}".format(type(tf[['idf']])))
-        print("df type = {}".format(type(tf[[file_str]])))
-        tf[new_file_col] = tf[[file_str]]*tf[['idf']]
+    cols = list(tf)
+    cols.pop(0)
+    # tf['idf'] = np.log(len(files)*1.0/tf.eq(0).sum(axis=1))
+    tf['idf'] = np.nan
+    for index, row in tf.iterrows():
+        doc_num = 0
+        for col in cols:
+            if row[col] != 0:
+                doc_num += 1
+        num_files = len(tf.columns) - 2
+        print("len of files = {}".format(num_files))
+        print("index value = {}".format(index))
+        print("doc num = {}".format(doc_num))
+        tf.ix[index, 'idf'] = np.log(num_files * 1.0 / doc_num)
 
-    print("tf dataframe")
-    print(tf)
+
+    tf.to_csv('test.csv')
+    cols = list(tf)
+    cols.pop(0)
+    cols.pop()
+    for col in cols:
+        new_col = col+'-idf'
+        # print("col = {}".format(col))
+        tf[new_col] = tf[col].mul(tf['idf'])
+
+
+    # print("tf dataframe")
+    # print(tf)
     ground_truth.to_csv("ground_truth.csv")
     tf.to_csv("tf-idf.csv")
 
