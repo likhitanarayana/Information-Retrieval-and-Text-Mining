@@ -33,10 +33,16 @@ def tf_idf(root, output_file):
             counter += 1
             print("file = {}".format(f))
             ground_truth.loc[len(ground_truth)] = [f, folder]
-            f_words = []
-            with open(new_folder+"/"+f) as open_f:
-                for line in open_f:
-                    f_words.extend([word for word in line.strip(string.punctuation).split()])
+            #f_words = []
+            #with open(new_folder+"/"+f) as open_f:
+            #    f_words = list(file.read().split())
+            curr_file = open(new_folder+"/"+f, 'r')
+            text = curr_file.read()
+            print("text = {}".format(text))
+            f_words = [word.strip(string.punctuation) for word in text.split()]
+            f_words = [x.lower() for x in f_words]
+            print("f-words = {}".format(f_words))
+
 
             # print("f words = {}".format(f_words))
             tf[f] = 0
@@ -53,6 +59,8 @@ def tf_idf(root, output_file):
             tf = tf.drop(f, 1)
             #print("tf")
             #print(tf)
+        if counter >= 2:
+            break
 
 
 
@@ -85,7 +93,7 @@ def tf_idf(root, output_file):
     # print("tf dataframe")
     # print(tf)
     ground_truth.to_csv("ground_truth.csv")
-    tf.to_csv("tf-idf.csv")
+    tf.to_csv("test_tf-idf.csv")
 
 
 tf_idf(sys.argv[1], sys.argv[2])
