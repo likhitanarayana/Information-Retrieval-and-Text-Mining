@@ -6,11 +6,16 @@ def cosineSimilarity(vector1, vector2):
    weightsOfVector1 = 0.0
    weightsOfVector2 = 0.0
    weightMultiplication = 0.0
-   for index, element in enumerate(vector1[1:]):
-      elementOfVector2 = vector2[index + 1]
-      weightsOfVector1 += np.square(element)
-      weightsOfVector2 += np.square(elementOfVector2)
-      weightMultiplication += element * elementOfVector2
+   startingIndex = 1
+   for x in range(1, len(vector1)):
+      weightsOfVector1 += np.square(vector1[x][1])
+      for y in range(startingIndex, len(vector2)):
+         if vector1[x][0] == vector2[y][0]:
+            weightMultiplication += vector1[x][1] * vector2[y][1]
+            startingIndex = y + 1
+            break
+   for y in range(1, len(vector2)):
+      weightsOfVector2 += np.square(vector2[y][1])
    return weightMultiplication / (np.sqrt(weightsOfVector1*weightsOfVector2))
 
 def convertToMatrix(fp):
@@ -30,10 +35,10 @@ def convertToMatrix(fp):
    for index, elem in enumerate(D[0]):
       newRow = []
       newRow.append(elem)
-      for row in D[1:]:
+      for index3, row in enumerate(D[1:]):
          for index2, elem2 in enumerate(row):
-            if index2 == index:
-               newRow.append(elem2)
+            if index2 == index and elem2 != 0.0:
+               newRow.append((index3, elem2))
       invertedD.append(newRow)
          
    return invertedD

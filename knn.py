@@ -24,12 +24,13 @@ def computeKNN(D, index, k, flag):
                if j[0] < sim:
                   KNearest[i] = (sim, row[0])
                   break
+   KNearest = sorted(KNearest, key=getKey)
    strin = ""
    for ind, row in enumerate(KNearest):
       if ind == len(KNearest) - 1:
          strin += str(row[1])
       else:
-         strin +=  str(row[1]) + ","
+         strin +=  str(row[1]) + "," 
       
    print("{},{}".format(dPoint[0], strin))
 
