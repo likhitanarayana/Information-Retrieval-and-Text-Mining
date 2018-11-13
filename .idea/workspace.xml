@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a5ae27c5-0b02-4b4c-94cf-34812b97f930" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/textVectorizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/textVectorizer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ground_truth.csv" beforeDir="false" afterPath="$PROJECT_DIR$/ground_truth.csv" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -16,8 +16,8 @@
       <file leaf-file-name="textVectorizer.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/textVectorizer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="205">
-              <caret line="55" lean-forward="true" selection-start-line="55" selection-end-line="55" />
+            <state relative-caret-position="322">
+              <caret line="38" column="93" lean-forward="true" selection-start-line="38" selection-start-column="93" selection-end-line="38" selection-end-column="93" />
               <folding>
                 <element signature="e#0#22#0" expanded="true" />
               </folding>
@@ -140,8 +140,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/textVectorizer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="55" lean-forward="true" selection-start-line="55" selection-end-line="55" />
+        <state relative-caret-position="322">
+          <caret line="38" column="93" lean-forward="true" selection-start-line="38" selection-start-column="93" selection-end-line="38" selection-end-column="93" />
           <folding>
             <element signature="e#0#22#0" expanded="true" />
           </folding>
