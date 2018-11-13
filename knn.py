@@ -12,7 +12,10 @@ def computeKNN(D, index, k, flag):
    dPoint = D[index]
    for ind, row in enumerate(D):
       if ind != index:
-         sim = cosineSimilarity(dPoint, row)
+         if flag == "cosine":
+            sim = cosineSimilarity(dPoint, row)
+         else: 
+            sim = 0.0
          if len(KNearest) < k:
             KNearest.append((sim, row[0]))
          else:
@@ -21,8 +24,14 @@ def computeKNN(D, index, k, flag):
                if j[0] < sim:
                   KNearest[i] = (sim, row[0])
                   break
-   print("Document : {} KNearest : {}".format(dPoint[0], KNearest))
-
+   strin = ""
+   for ind, row in enumerate(KNearest):
+      if ind == len(KNearest) - 1:
+         strin += str(row[1])
+      else:
+         strin +=  str(row[1]) + ","
+      
+   print("{},{}".format(dPoint[0], strin))
 
 def KNN(vectorFile, k, flag):
    D = []
