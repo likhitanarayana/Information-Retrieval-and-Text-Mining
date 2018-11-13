@@ -10,7 +10,7 @@ def cosineSimilarity(vector1, vector2):
       elementOfVector2 = vector2[index + 1]
       weightsOfVector1 += np.square(element)
       weightsOfVector2 += np.square(elementOfVector2)
-      weightMultiplication += element * elementofVector2
+      weightMultiplication += element * elementOfVector2
    return weightMultiplication / (np.sqrt(weightsOfVector1*weightsOfVector2))
 
 def convertToMatrix(fp):
