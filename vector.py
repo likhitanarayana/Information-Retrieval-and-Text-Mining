@@ -32,13 +32,20 @@ def convertToMatrix(fp):
       #print("{} , {}".format(index4, row))
       D.append(row)
    invertedD = []
+   indexIDF = 0
    for index, elem in enumerate(D[0]):
-      newRow = []
-      newRow.append(elem)
-      for index3, row in enumerate(D[1:]):
-         for index2, elem2 in enumerate(row):
-            if index2 == index and elem2 != 0.0:
-               newRow.append((index3, elem2))
-      invertedD.append(newRow)
+      if elem == "idf":
+         indexIDF = index
+         break
+
+   for index, elem in enumerate(D[0]):
+      if index > indexIDF:
+         newRow = []
+         newRow.append(elem)
+         for index3, row in enumerate(D[1:]):
+            for index2, elem2 in enumerate(row):
+               if index2 == index and elem2 != 0.0:
+                  newRow.append((index3, elem2))
+         invertedD.append(newRow)
          
    return invertedD
