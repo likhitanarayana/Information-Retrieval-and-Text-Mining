@@ -41,6 +41,9 @@ def tf_idf(root, output_file):
             print("text = {}".format(text))
             f_words = [word.strip(string.punctuation) for word in text.split()]
             f_words = [x.lower() for x in f_words]
+            f_words = [word.replace(",", "") for word in f_words]
+            f_words = [word.replace(".", "") for word in f_words]
+            f_words = [word.replace("-", "") for word in f_words]
             print("f-words = {}".format(f_words))
 
 
@@ -59,6 +62,8 @@ def tf_idf(root, output_file):
             tf = tf.drop(f, 1)
             #print("tf")
             #print(tf)
+            if counter >= 2:
+                break
 
 
     cols = list(tf)
