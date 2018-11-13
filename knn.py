@@ -4,6 +4,9 @@ import sys
 from vector import cosineSimilarity
 from vector import convertToMatrix
 
+def getKey(item):
+   return item[0]
+
 def computeKNN(D, index, k, flag):
    KNearest = []
    dPoint = D[index]
@@ -11,12 +14,12 @@ def computeKNN(D, index, k, flag):
       if ind != index:
          sim = cosineSimilarity(dPoint, row)
          if len(KNearest) < k:
-            KNearest.append((sim, D[index][0]))
+            KNearest.append((sim, row[0]))
          else:
-            KNearest = sorted(KNearest)
+            KNearest = sorted(KNearest, key=getKey)
             for i,j in enumerate(KNearest):
                if j[0] < sim:
-                  KNearest[i] = (sim, D[index][0])
+                  KNearest[i] = (sim, row[0])
                   break
    print("Document : {} KNearest : {}".format(dPoint[0], KNearest))
 
