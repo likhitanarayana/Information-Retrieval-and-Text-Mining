@@ -86,6 +86,8 @@ def tf_idf(root, stop_list_file=None):
                         word_information.term_frequency += 1
                         doc_info.words[word] = word_information # term frequency
                     doc_unique_words.append(word)
+            doc_info.length = length
+            print("##doc_info = {}".format(doc_info))
 
             # go through and update other documents frequencies
 
@@ -121,12 +123,18 @@ def tf_idf(root, stop_list_file=None):
 
     ground_truth.to_csv("ground_truth.csv")
 
+    return doc_list
+
 
 def test_reading_in_pickle(random):
     with open('objs.pkl', 'rb') as f:
         doc_vector = pickle.load(f)
-        print("doc vector = {}".format(doc_vector))
+        #print("doc vector = {}".format(doc_vector))
+
+    for key in doc_vector:
+        print("key = {}".format(key))
+        print("value = {}".format(doc_vector[key]))
 
 
-tf_idf(sys.argv[1], sys.argv[2])
-#test_reading_in_pickle(sys.argv[1])
+#tf_idf(sys.argv[1], sys.argv[2])
+test_reading_in_pickle(sys.argv[1])
