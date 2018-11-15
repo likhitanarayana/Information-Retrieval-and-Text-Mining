@@ -117,7 +117,7 @@ def tf_idf(root, stop_list_file=None):
             if counter <= 2:
                 break
 
-    with open('objs.pkl', 'wb') as f:  # Python 3: open(..., 'wb')
+    with open('objs.pkl', 'wb') as f:
         pickle.dump(doc_list, f)
 
 
@@ -131,9 +131,14 @@ def test_reading_in_pickle():
         doc_vector = pickle.load(f)
         #print("doc vector = {}".format(doc_vector))
 
-    for key in doc_vector:
-        print("key = {}".format(key))
-        print("value = {}".format(doc_vector[key]))
+    for file in doc_vector:
+        print("file = {}".format(file))
+        print("\tfile length = {}".format((doc_vector[file]).length))
+        print("\twords in document = ")
+        for word in (doc_vector[file].words):
+            print("\t\t word = {}".format(word))#((doc_vector[file]).words))
+            print("\t\t\t word term frequency = {}".format(((doc_vector[file]).words[word]).term_frequency))
+            print("\t\t\t word document frequency = {}".format(((doc_vector[file]).words[word]).document_frequency))
 
 
 #tf_idf(sys.argv[1], sys.argv[2])
