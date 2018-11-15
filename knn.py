@@ -57,4 +57,4 @@ def test_reading_in_pickle():
 
     return doc_vector
   
-KNN(sys.argv[1], sys.argv[2], sys.argv[3])
+#KNN(sys.argv[1], sys.argv[2], sys.argv[3])

@@ -39,8 +39,8 @@ def tf_idf(root, stop_list_file=None):
                 if len(line) != 0:
                     stop_list.append(line)
 
-    if stop_list is not None:
-        print("stop word = {}".format(stop_list))
+    #if stop_list is not None:
+        #print("stop word = {}".format(stop_list))
 
     doc_list = dict()
 
@@ -87,7 +87,7 @@ def tf_idf(root, stop_list_file=None):
                         doc_info.words[word] = word_information # term frequency
                     doc_unique_words.append(word)
             doc_info.length = length
-            print("##doc_info = {}".format(doc_info))
+            #print("##doc_info = {}".format(doc_info))
 
             # go through and update other documents frequencies
 
@@ -114,8 +114,7 @@ def tf_idf(root, stop_list_file=None):
 
             doc_list[f] = doc_info
 
-            if counter <= 2:
-                break
+
 
     with open('objs.pkl', 'wb') as f:
         pickle.dump(doc_list, f)
