@@ -126,7 +126,7 @@ def tf_idf(root, stop_list_file=None):
     return doc_list
 
 
-def test_reading_in_pickle(random):
+def test_reading_in_pickle():
     with open('objs.pkl', 'rb') as f:
         doc_vector = pickle.load(f)
         #print("doc vector = {}".format(doc_vector))
@@ -137,4 +137,4 @@ def test_reading_in_pickle(random):
 
 
 #tf_idf(sys.argv[1], sys.argv[2])
-test_reading_in_pickle(sys.argv[1])
+test_reading_in_pickle()
