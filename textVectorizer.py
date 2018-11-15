@@ -142,4 +142,4 @@ def test_reading_in_pickle():
 
 
 #tf_idf(sys.argv[1], sys.argv[2])
-test_reading_in_pickle()
+#test_reading_in_pickle()

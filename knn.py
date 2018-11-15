@@ -2,46 +2,59 @@ import pandas as pd
 import numpy as np
 import sys
 from vector import cosineSimilarity
-from vector import convertToMatrix
+from vector import okapi
+from vector import arrayWords
+from vector import weightWords
+from vector import avdl
+from textVectorizer import *
 
 def getKey(item):
    return item[0]
 
-def computeKNN(D, index, k, flag):
+def computeKNN(index, D, k, flag, ArrayW, avd, WeightWords):
    KNearest = []
    dPoint = D[index]
-   for ind, row in enumerate(D):
-      if ind != index:
+   for key in D:
+      if key != index:
          if flag == "cosine":
-            sim = cosineSimilarity(dPoint, row)
+            sim = cosineSimilarity(dPoint, D[key], len(D), ArrayW, WeightWords[index], WeightWords[key])
          else: 
-            sim = 0.0
+            sim = okapi(dPoint, D[key], len(D), avd)
          if len(KNearest) < k:
-            KNearest.append((sim, row[0]))
+            KNearest.append((sim, key))
          else:
             KNearest = sorted(KNearest, key=getKey)
             for i,j in enumerate(KNearest):
                if j[0] < sim:
-                  KNearest[i] = (sim, row[0])
+                  KNearest[i] = (sim, key)
                   break
    KNearest = sorted(KNearest, key=getKey)
    strin = ""
    for ind, row in enumerate(KNearest):
       if ind == len(KNearest) - 1:
-         strin += str(row[1])
+         strin += str(row[1]) + str(row[0])
       else:
-         strin +=  str(row[1]) + "," 
+         strin +=  str(row[1]) + " " + str(row[0]) +  "," 
       
-   print("{},{}".format(dPoint[0], strin))
+   print("{},{}".format(index, strin))
 
 def KNN(vectorFile, k, flag):
-   D = []
+   D = test_reading_in_pickle()
    k = int(k)
-   fp = open(vectorFile, "r")
-   D = convertToMatrix(fp)
-   for index, row in enumerate(D):
-      #print(row)
-      computeKNN(D, index, k, flag)
+   ArrayW = arrayWords(D)
+   avd = avdl(D)
+   WeightWords = weightWords(D, ArrayW)
+   for key in D:
+       #print("key = {}".format(key))
+       #print("value = {}".format(D[key].words))
+       #print(len(D))
+       computeKNN(key, D, k, flag, ArrayW, avd, WeightWords)
 
+def test_reading_in_pickle():
+    with open('objs.pkl', 'rb') as f:
+        doc_vector = pickle.load(f)
+        #print("doc vector = {}".format(doc_vector))
+
+    return doc_vector
   
 KNN(sys.argv[1], sys.argv[2], sys.argv[3])

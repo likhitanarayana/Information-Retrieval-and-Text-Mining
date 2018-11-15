@@ -2,50 +2,56 @@
 import numpy as np
 import csv
 
-def cosineSimilarity(vector1, vector2):
-   weightsOfVector1 = 0.0
-   weightsOfVector2 = 0.0
+def cosineSimilarity(vector1, vector2, lenD, ArrayWords, weightsOfVector1, weightsOfVector2):
    weightMultiplication = 0.0
-   startingIndex = 1
-   for x in range(1, len(vector1)):
-      weightsOfVector1 += np.square(vector1[x][1])
-      for y in range(startingIndex, len(vector2)):
-         if vector1[x][0] == vector2[y][0]:
-            weightMultiplication += vector1[x][1] * vector2[y][1]
-            startingIndex = y + 1
-            break
-   for y in range(1, len(vector2)):
-      weightsOfVector2 += np.square(vector2[y][1])
-   return weightMultiplication / (np.sqrt(weightsOfVector1*weightsOfVector2))
+   for row in vector2.words:
+      if row in vector1.words:
+         dfi = vector1.words[row].document_frequency
+         tfi = vector1.words[row].term_frequency
+         tfq = vector2.words[row].term_frequency
+         ArrW = ArrayWords[row]
+         weightMultiplication += (np.log2(lenD/dfi)*(tfi/ArrW)) * (np.log2(lenD/dfi)*(tfq/ArrW))
+   return weightMultiplication / (weightsOfVector1*weightsOfVector2)
 
-def convertToMatrix(fp):
-   D = []
-   lines = fp.readlines()
-   #takes out the id and the word
-   D.append((lines[0].strip().split(","))[2:])
-   #index4 = 0
-   for line in lines[1:]:
-      row = (line.strip().split(','))[2:]
-      for index, elem in enumerate(row):
-         row[index] = float(elem)         
-      #index4 += 1
-      #print("{} , {}".format(index4, row))
-      D.append(row)
-   invertedD = []
-   indexIDF = 0
-   for index, elem in enumerate(D[0]):
-      if elem == "idf":
-         indexIDF = index
-         break
-
-   for index, elem in enumerate(D[0]):
-      if index > indexIDF:
-         newRow = []
-         newRow.append(elem)
-         for index3, row in enumerate(D[1:]):
-            for index2, elem2 in enumerate(row):
-               if index2 == index and elem2 != 0.0:
-                  newRow.append((index3, elem2))
-         invertedD.append(newRow)
+def okapi(vector1, vector2, lenD, avdl):
+   summ = 0.0
+   for row in vector1.words:
+      if row in vector2.words:
+         dfi = vector1.words[row].document_frequency
+         fij = vector1.words[row].term_frequency
+         fiq = vector2.words[row].term_frequency
+         k1 = 1.5
+         k2 = 100
+         summ += (np.log(lenD - dfi + .5) * ((k1 + 1) * fij / (k1 * (1 - .75 + .75*vector1.length/avdl) + fij)) * (((k2 + 1) * fiq)/(k2 + fiq)))
+   return summ
          
-   return invertedD
+def arrayWords(D):
+   ArrayWords = {}
+   for row in D:
+      dRow = D[row]
+      for word in dRow.words:
+         df = dRow.words[word].term_frequency
+         if word in ArrayWords:
+            if df > ArrayWords[word]:
+               ArrayWords[word] = df
+         else:
+            ArrayWords[word] = df
+   return ArrayWords
+
+def weightWords(D, ArrayWords):
+   weightWords = {}
+   lenD = len(D)
+   for row in D:
+      dRow = D[row]
+      weightsOfVector1 = 0.0
+      for word in dRow.words:
+         weightsOfVector1 += np.log2(lenD/dRow.words[word].document_frequency)*((dRow.words[word].term_frequency)/ArrayWords[word])
+      weightWords[row] = (np.sqrt(np.square(weightsOfVector1)))
+   return weightWords
+
+def avdl(D):
+   avg = 0.0
+   for row in D:
+      avg += D[row].length
+   return avg/len(D)
+
