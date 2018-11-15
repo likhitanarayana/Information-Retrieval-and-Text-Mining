@@ -13,6 +13,22 @@ def cosineSimilarity(vector1, vector2, lenD, ArrayWords, weightsOfVector1, weigh
          weightMultiplication += (np.log2(lenD/dfi)*(tfi/ArrW)) * (np.log2(lenD/dfi)*(tfq/ArrW))
    return weightMultiplication / (weightsOfVector1*weightsOfVector2)
 
+def cosineSimilarityKMeans(vector1, vector2, lenD, ArrayWords):
+   weightsOfVector1 = 0.0
+   weightsOfVector2 = 0.0
+   weightMultiplication = 0.0
+   for row in vector1.words:
+      weightsOfVector1 += vector1.words[row].term_frequency
+   for row in vector2.words:
+      tfq = vector2.words[row].term_frequency
+      weightsOfVector2 += tfq
+      if row in vector1.words:
+         dfi = vector1.words[row].document_frequency
+         tfi = vector1.words[row].term_frequency
+         ArrW = ArrayWords[row]
+         weightMultiplication += (np.log2(lenD/dfi)*(tfi/ArrW)) * (np.log2(lenD/dfi)*(tfq/ArrW))
+   return weightMultiplication / (weightsOfVector1*weightsOfVector2)
+
 def okapi(vector1, vector2, lenD, avdl):
    summ = 0.0
    for row in vector1.words:
