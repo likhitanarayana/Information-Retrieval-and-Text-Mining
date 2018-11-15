@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import sys
 from vector import cosineSimilarity
+from vector import cosineSimilarityKMeans
 from vector import okapi
 from vector import arrayWords
 from vector import weightWords
@@ -32,13 +33,13 @@ def computeKNN(index, D, k, flag, ArrayW, avd, WeightWords):
    strin = ""
    for ind, row in enumerate(KNearest):
       if ind == len(KNearest) - 1:
-         strin += str(row[1]) + str(row[0])
+         strin += str(row[1])
       else:
-         strin +=  str(row[1]) + " " + str(row[0]) +  "," 
+         strin +=  str(row[1]) +  "," 
       
    print("{},{}".format(index, strin))
 
-def KNN(vectorFile, k, flag):
+def KNN(k, flag):
    D = test_reading_in_pickle()
    k = int(k)
    ArrayW = arrayWords(D)
