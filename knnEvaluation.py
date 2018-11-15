@@ -1,5 +1,4 @@
 import sys
-import operator
 
 def groundTruthSplit(fp):
    Ground = {}
@@ -19,7 +18,7 @@ def knnOutcomeSplit(fp):
 
 def knnEvaluation(fileKnn, fileGround):
    KNN = {}
-   confusionMatrix= []
+   ConfusionMatrix = {}
    Ground = {}
    totalCorr = 0.0
    totalIncorr = 0.0
@@ -27,6 +26,11 @@ def knnEvaluation(fileKnn, fileGround):
    fp2 = open(fileGround, "r")
    KNN = knnOutcomeSplit(fp1)
    Ground = groundTruthSplit(fp2)
+   for row in Ground:
+      ConfusionMatrix[Ground[row]] = {}
+   for row in ConfusionMatrix:
+      for row2 in Ground:
+         ConfusionMatrix[row][Ground[row2]] = 0
    Authors = {}
    for row in Ground:
       Authors[Ground[row]] = [0, 0, 0, 0]
@@ -41,13 +45,14 @@ def knnEvaluation(fileKnn, fileGround):
             Classes[author] = 1
       maxy = 0
       classy = ""
-      for row in Classes:
+      for row in sorted(Classes.keys()):
          if Classes[row] > maxy:
             maxy = Classes[row]
             classy = row
       if Ground[ind] == classy:
          totalCorr += 1
          Authors[classy][0] = Authors[classy][0] + 1
+         ConfusionMatrix[classy][classy] = ConfusionMatrix[classy][classy] + 1
          for row in Authors:
             if row != classy:
                Authors[row][3] = Authors[row][3] + 1
@@ -55,10 +60,11 @@ def knnEvaluation(fileKnn, fileGround):
          totalIncorr +=1
          Authors[classy][1] = Authors[classy][1] + 1
          Authors[Ground[ind]][2] = Authors[Ground[ind]][2] + 1
+         ConfusionMatrix[Ground[ind]][classy] = ConfusionMatrix[Ground[ind]][classy] + 1
          for row in Authors:
             if row != classy and row != Ground[ind]:
                Authors[row][3] = Authors[row][3] + 1
-   for row in Authors:
+   for row in sorted(Authors.keys()):
       Recall = (float(Authors[row][0]))/(Authors[row][0] + Authors[row][2])
       Precision = (float(Authors[row][0]))/(Authors[row][0] + Authors[row][1])
       F_measure = ((2 * Precision  * Recall)/(Precision + Recall))
@@ -66,6 +72,15 @@ def knnEvaluation(fileKnn, fileGround):
       print("   Precision : {}, Recall : {}, F-measure : {}".format(Precision, Recall, F_measure))
 
    print("Correctly Predicted : {}, Incorrectly Predicted : {}, Overall Accuracy : {}".format(totalCorr, totalIncorr, totalCorr/(totalIncorr + totalCorr)))
+   line1 = ""
+   for row in sorted(ConfusionMatrix.keys()):
+      line1 += "," + row
+   print(line1)
+   for row in sorted(ConfusionMatrix.keys()):
+      line = ""
+      for row2 in sorted((ConfusionMatrix[row]).keys()):
+         line += "," + str(ConfusionMatrix[row][row2])
+      print(line)
 
       
    
