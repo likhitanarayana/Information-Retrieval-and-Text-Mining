@@ -52,10 +52,10 @@ def KNN(k, flag):
        computeKNN(key, D, k, flag, ArrayW, avd, WeightWords)
 
 def test_reading_in_pickle():
-    with open('objs.pkl', 'rb') as f:
+    with open('test_train_objs.pkl', 'rb') as f:
         doc_vector = pickle.load(f)
         #print("doc vector = {}".format(doc_vector))
 
     return doc_vector
   
-#KNN(sys.argv[1], sys.argv[2], sys.argv[3])
+KNN(sys.argv[1], sys.argv[2])
