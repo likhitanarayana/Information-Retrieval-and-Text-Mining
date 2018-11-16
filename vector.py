@@ -38,8 +38,8 @@ def okapi(vector1, vector2, lenD, avdl):
          dfi = vector1.words[row].document_frequency
          fij = vector1.words[row].term_frequency
          fiq = vector2.words[row].term_frequency
-         k1 = 1.5
-         k2 = 100
+         k1 = 1
+         k2 = 1
          summ += (np.log(lenD - dfi + .5) * ((k1 + 1) * fij / (k1 * (1 - .75 + .75*vector1.length/avdl) + fij)) * (((k2 + 1) * fiq)/(k2 + fiq)))
    return summ
          
