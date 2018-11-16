@@ -14,9 +14,11 @@ def cosineSimilarity(vector1, vector2, lenD, ArrayWords, weightsOfVector1, weigh
    return weightMultiplication / (weightsOfVector1*weightsOfVector2)
 
 def cosineSimilarityKMeans(vector1, vector2, lenD, ArrayWords):
+   #print("in cosineSimiliarityKMeans")
    weightsOfVector1 = 0.0
    weightsOfVector2 = 0.0
    weightMultiplication = 0.0
+   #print("vector1.words = {}".format(vector1))
    for row in vector1.words:
       weightsOfVector1 += vector1.words[row].term_frequency
    for row in vector2.words:

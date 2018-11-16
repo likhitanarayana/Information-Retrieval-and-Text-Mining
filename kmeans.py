@@ -29,7 +29,9 @@ def diskKMeans(D, k, flag):
         # print("init s = {}".format(s))
         for x in D:
             print("x = {}".format(x))
-            cluster = assign_cluster(x, m, flag, len(D), avd, ArrayW[x])
+            #print("D[x] = {}".format(D[x]))
+            print("ArrayW = {}".format(ArrayW))
+            cluster = assign_cluster(D[x], m, flag, len(D), avd, ArrayW)
             # print("cluster = {}".format(cluster))
             cl[cluster].append(x)
             s[cluster].append(x)
@@ -42,6 +44,8 @@ def diskKMeans(D, k, flag):
             # print("s = {}".format(s[j]))
             # print("len of s = {}".format(len(s)))
             # print("old m = {}".format(m))
+
+            ### need new way of calculating mean cluster values
             if len(s[j]) != 0:
                 m[j] = [float(sum(col)) / len(col) for col in zip(*s[j])]
             else:
@@ -59,6 +63,7 @@ def mean(list):
     return sum(list) / len(list)
 
 
+### needs to change for text documents
 def is_stopping_condition(m, old_m):
     # print("m = {}".format(m))
     # print("old_m = {}".format(old_m))
@@ -70,12 +75,20 @@ def is_stopping_condition(m, old_m):
 
 
 def assign_cluster(x, clusters, flag, D_length, avd, ArrayW):
-    # print("\nin assign_cluster")
+    print("\nin assign_cluster")
+    print("len of clusters = {}".format(len(clusters)))
     shortest_distance = float('inf')
     cluster = -1
-    for i in range(0, len(clusters)):
+    final_cluster_int = -1
+    cluster_int = 0
+    for i in clusters:
         # print("i = {}".format(i))
         if flag == 'cosine':
+            #print("i = {}".format(i))
+            #print("D_length = {}".format(D_length))
+            #print("x = {}".format(x.words))
+            #print("clusters i = {}".format(clusters[i]))
+            #print("clusters type = {}".format(type(clusters)))
             distance = cosineSimilarityKMeans(x, clusters[i], D_length, ArrayW)
             # cosineSimilarity(dPoint, D[key], len(D), ArrayW, WeightWords[index], WeightWords[key])
         else:
@@ -85,9 +98,12 @@ def assign_cluster(x, clusters, flag, D_length, avd, ArrayW):
         if distance < shortest_distance:
             shortest_distance = distance
             cluster = i
+            final_cluster_int = cluster_int
             print("cluster = {}".format(i))
+        cluster_int += 1
 
-    return cluster
+    print("assigning to cluster = {}".format(cluster_int))
+    return final_cluster_int
 
 
 def random_initial_centroids(D, k):

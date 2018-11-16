@@ -146,5 +146,5 @@ def test_reading_in_pickle():
             print("\t\t\t word document frequency = {}".format(((doc_vector[file]).words[word]).document_frequency))
 
 
-tf_idf(sys.argv[1], sys.argv[2])
+#tf_idf(sys.argv[1], sys.argv[2])
 #test_reading_in_pickle()
