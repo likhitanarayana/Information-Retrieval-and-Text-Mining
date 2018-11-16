@@ -3,13 +3,18 @@ import pickle
 import numpy as np
 import sys
 from textVectorizer import *
+from vector import *
 import random
 
 
-def diskKMeans(D, k):
+def diskKMeans(D, k, flag):
     # print("len of D orig {}".format(len(D)))
+    ArrayW = arrayWords(D)
+    avd = avdl(D)
+    WeightWords = weightWords(D, ArrayW)
+
     m = random_initial_centroids(D, k)
-    # print("init centroids = {}".format(m))
+    print("init centroids = {}".format(m))
     s = []
     num = []
     cl = []
@@ -24,7 +29,7 @@ def diskKMeans(D, k):
         # print("init s = {}".format(s))
         for x in D:
             print("x = {}".format(x))
-            cluster = assign_cluster(x, m)
+            cluster = assign_cluster(x, m, flag, len(D), avd, ArrayW[x])
             # print("cluster = {}".format(cluster))
             cl[cluster].append(x)
             s[cluster].append(x)
@@ -64,21 +69,23 @@ def is_stopping_condition(m, old_m):
     return True
 
 
-def assign_cluster(x, clusters):
+def assign_cluster(x, clusters, flag, D_length, avd, ArrayW):
     # print("\nin assign_cluster")
     shortest_distance = float('inf')
     cluster = -1
     for i in range(0, len(clusters)):
         # print("i = {}".format(i))
-        distance_to_cluster = 0
-        for attribute in range(0, len(x)):
-            distance_to_cluster += np.square(float(x[attribute]) - float(clusters[i][attribute]))
-        distance = np.sqrt(distance_to_cluster)
-        # print("distance = {}".format(distance))
+        if flag == 'cosine':
+            distance = cosineSimilarityKMeans(x, clusters[i], D_length, ArrayW)
+            # cosineSimilarity(dPoint, D[key], len(D), ArrayW, WeightWords[index], WeightWords[key])
+        else:
+            distance = okapi(x, clusters[i], D_length, avd)
+            #okapi(dPoint, D[key], len(D), avd)
+        print("distance = {}".format(distance))
         if distance < shortest_distance:
             shortest_distance = distance
             cluster = i
-            # print("cluster = {}".format(i))
+            print("cluster = {}".format(i))
 
     return cluster
 
@@ -91,7 +98,6 @@ def random_initial_centroids(D, k):
     keys = random.sample(list(D), k)
     for key in keys:
         centers[key] = D[key]
-        D.pop(key)
     print("centers = {}".format(centers))
     return centers
 
@@ -124,13 +130,15 @@ def calc_stats(cluster, center):
     return max_dist, min_dist, average, sse
 
 
-def runkMeans(fileName, k):
+def runkMeans(fileName, k, flag):
     D = []
     #fp = open(fileName, "r")
     #D = convertToMatrix(fp)
     with open(fileName, 'rb') as f:
         doc_vector = pickle.load(f)
-    clusters, ms = diskKMeans(doc_vector, int(k))
+
+
+    clusters, ms = diskKMeans(doc_vector, int(k), flag)
     for i in range(0, len(clusters)):
         if len(clusters[i]) != 0:
             max, min, average, sse = calc_stats(clusters[i], ms[i])
@@ -147,4 +155,4 @@ def runkMeans(fileName, k):
         for j in clusters[i]:
             print("\t\t{}".format(j))
 
-runkMeans(sys.argv[1], sys.argv[2])
+runkMeans(sys.argv[1], sys.argv[2], sys.argv[3])
